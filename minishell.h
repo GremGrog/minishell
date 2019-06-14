@@ -31,8 +31,24 @@ typedef struct	s_env
 	int			used_size;
 }				t_env;
 
+typedef struct	s_hasht
+{
+	void				*key;
+	void				*value;
+	struct s_hasht		*next;
+}				t_hasht;
+
+typedef struct	s_args
+{
+	char		**argv;
+	int			size;
+	struct s_co	*next;
+}				t_args;
+
+int				g_htabsize;
+
 t_env			*g_env;
 void			init_env(void);
 void			copy_matrix(char **env);
-
+void			create_hash_table(void);
 # endif
