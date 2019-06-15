@@ -2,10 +2,10 @@
 
 long long	hash_for_builtin(char *str)
 {
-	int	i;
+	int			i;
 	long long	hash;
-	int	p;
-	long long p_pow;
+	int			p;
+	long long	p_pow;
 
 	p_pow = 1;
 	i = 0;
@@ -54,7 +54,7 @@ void	create_hash_table()
 	i = 0;
 	while (i < 20)
 		arr[i++] = create_elem(NULL, NULL);
-	ls = create_elem("kek", "function");
+	ls = create_elem("kek", &ft_printf);
 	hash = hash_for_builtin((char*)ls->key);
 	if (arr[hash])
 	{
@@ -63,8 +63,8 @@ void	create_hash_table()
 		free(arr[hash]);
 	}
 	arr[hash] = ls;
-	for (int i = 0; i < 20; i++)
-		ft_printf("%d %s\n", i, arr[i]->key);
+	// for (int i = 0; i < 20; i++)
+	// 	ft_printf("%d %s\n", i, arr[i]->key);
 	i = 0;
 	while (i < 20)
 		free(arr[i++]);

@@ -12,48 +12,21 @@
 
 #include "../minishell.h"
 
-char	*get_command_name(char *com)
-{
-	char	*command;
-	int		i;
-
-	i = 0;
-	command = NULL;
-	while (com[i] != ' ' && com[i])
-		i++;
-	command = (char*)malloc(sizeof(char) * i + 1);
-	ft_strncpy(command, com, i);
-	command[i] = '\0';
-	return (command);
-}
-
-void	get_command_from_input(t_args *args)
-{
-	char	*co_name;
-	int		i;
-
-	i = 0;
-	// while (args->argv[i] != NULL)
-	// {
-	co_name = get_command_name(args->argv[i]);
-		// i++;
-	// }
-}
-
-void	parse_input(char *input)
+t_args	*parse_input(char *input)
 {
 	t_args	*args;
 
+	if (!input)
+		return (NULL);
 	args = (t_args*)malloc(sizeof(t_args));
 	args->size = 0;
 	args->argv = ft_strsplit((char*)input, ';');
 	while (args->argv[args->size] != NULL)
 	{
 		args->argv[args->size] = ft_strtrim(args->argv[args->size]);
-		ft_printf("%s\n", args->argv[args->size]);
 		args->size++;
 	}
-	get_command_from_input(args);
+	return (args);
 }
 
 void	get_input(char **buf)
@@ -64,19 +37,27 @@ void	get_input(char **buf)
 void	mini_loop(void)
 {
 	char	*input;
+	t_args	*args;
+	t_co	*co_exec;
 
 	input = NULL;
 	while (1)
 	{
 		write(1, "*_*/` ", 6);
 		get_input(&input);
-		parse_input(input);
+		args = parse_input(input);
+		if (args == NULL)
+			break ;
+		co_exec = get_commands_to_exec(args);
+		exec_command(args, co_exec->next);
 	}
+	free(args);
+	free(co_exec);
 }
 
 int main(int argc, char **argv, char **env)
 {
-	if (!argc && !argv)
+	if (!argc && !argv && !env)
 		return (-1);
 	init_env();
 	copy_matrix(env);

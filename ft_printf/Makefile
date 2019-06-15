@@ -82,10 +82,10 @@ all: $(NAME)
 	@true
 
 $(NAME): $(DIR_O) $(OBJF)
-	make -C libft
-	cp libft/libft.a ./$(NAME)
-	ar rc $(NAME) $(OBJF)
-	ranlib $(NAME)
+	@make -C libft
+	@cp libft/libft.a ./$(NAME)
+	@ar rc $(NAME) $(OBJF)
+	@ranlib $(NAME)
 
 $(DIR_O):
 	@mkdir -p obj

@@ -33,17 +33,24 @@ typedef struct	s_env
 
 typedef struct	s_hasht
 {
-	void				*key;
-	void				*value;
-	struct s_hasht		*next;
+	void			*key;
+	void			*value;
+	struct s_hasht	*next;
 }				t_hasht;
 
 typedef struct	s_args
 {
-	char		**argv;
-	int			size;
-	struct s_co	*next;
+	char			**argv;
+	int				size;
+	struct s_args	*next;
 }				t_args;
+
+typedef struct	s_co
+{
+	char			*co_name;
+	int				index_argv;
+	struct s_co		*next;
+}				t_co;
 
 int				g_htabsize;
 
@@ -51,4 +58,7 @@ t_env			*g_env;
 void			init_env(void);
 void			copy_matrix(char **env);
 void			create_hash_table(void);
-# endif
+t_co			*get_commands_to_exec(t_args *args);
+void			exec_command(t_args *argv, t_co *co_exec);
+void			cd_builtin(char *path);
+#endif
