@@ -45,6 +45,8 @@ char	*get_builtin(char *co_name)
 
 	if (!co_name)
 		return (NULL);
+	if (ft_strcmp(co_name, "cd") == 0)
+		return (NULL);
 	full_filename = NULL;
 	i = 0;
 	while (g_env->envp[12][i] != '=')
@@ -74,14 +76,19 @@ void	exec_command(t_args *argv, t_co *co_exec)
 	while (argv->argv[i])
 	{
 		if (ft_strcmp(co_exec->co_name, "cd") == 0)
-			cd_builtin(argv->argv[i]);
+		{
+			pid = fork();
+			if (pid == 0)
+				cd_builtin(argv->argv[i]);
+			else
+				wpid = waitpid(pid, &status, WUNTRACED);
+		}
 		full_filename = get_builtin(co_exec->co_name);
 		if (full_filename)
 		{
 			pid = fork();
 			if (pid == 0)
-				execve(full_filename, ft_strsplit(argv->argv[i], ' '),
-																g_env->envp);
+				execve(full_filename, co_exec->co_args,	g_env->envp);
 			else
 				wpid = waitpid(pid, &status, WUNTRACED);
 		}

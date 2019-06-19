@@ -43,14 +43,18 @@ t_co	*get_commands_to_exec(t_args *args)
 	int		i;
 
 	i = 0;
+	if (!args)
+		return (NULL);
 	head = (t_co*)malloc(sizeof(t_co));
 	head->co_name = NULL;
+	head->co_args = NULL;
 	head->index_argv = -1;
 	head->next = NULL;
 	while (args->argv[i] != NULL)
 	{
 		co_exec = get_command_name(args->argv[i]);
 		co_exec->index_argv = i;
+		co_exec->co_args = ft_strsplit(args->argv[i], ' ');
 		add_node_co(head, co_exec);
 		i++;
 	}

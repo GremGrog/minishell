@@ -11,6 +11,11 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+// 
+// char	*search_home_dir(void)
+// {
+//
+// }
 
 void	cd_builtin(char *argv)
 {
@@ -19,14 +24,15 @@ void	cd_builtin(char *argv)
 	char	**args;
 
 	args = ft_strsplit(argv, ' ');
-	if (args[1] != NULL)
+	path = NULL;
+	if (args[1] != NULL && args[1][0] != '~')
 		path = args[1];
-	else if (args[1] == NULL)
-		path = "~";
+	else if (args[1] == NULL || args[1][0] == '~')
+		path = "/Users/fmasha-h";
 	r = chdir(path);
 	if (r == -1)
 	{
-		if (ENOENT[chdir(path)])
-			ft_printf(" No such file or directory");
+		if (access(path, F_OK) == -1)
+			ft_printf("cd: no such file or directory: %s\n", path);
 	}
 }

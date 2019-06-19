@@ -43,6 +43,8 @@ void	mini_loop(void)
 	input = NULL;
 	while (1)
 	{
+		co_exec = NULL;
+		args = NULL;
 		write(1, "*_*/` ", 6);
 		get_input(&input);
 		args = parse_input(input);
@@ -50,18 +52,49 @@ void	mini_loop(void)
 			break ;
 		co_exec = get_commands_to_exec(args);
 		exec_command(args, co_exec->next);
+		input = NULL;
 	}
-	free(args);
-	free(co_exec);
+	if (args)
+		free(args);
+	if (co_exec)
+		free(co_exec);
 }
 
 int main(int argc, char **argv, char **env)
 {
+	t_map	*map;
+	int		i = 0;
 	if (!argc && !argv && !env)
 		return (-1);
-	init_env();
-	copy_matrix(env);
-	mini_loop();
-	// create_hash_table();
+	// init_env();
+	// copy_matrix(env);
+	// mini_loop();
+	map = create_hash_table(3);
+	add_elem_to_hasht(map, "cd", NULL);
+	// add_elem_to_hasht(map, "cd", NULL);
+	// add_elem_to_hasht(map, "kek", NULL);
+	// add_elem_to_hasht(map, "dok", NULL);
+	while (i < 3)
+	{
+		if (!map->hash_t[i])
+		{
+			i++;
+			continue ;
+		}
+		if (map->hash_t[i]->key != NULL)
+			ft_printf("%d %s\n", i, map->hash_t[i]->key);
+		if (map->hash_t[i]->next)
+		{
+			map->hash_t[i] = map->hash_t[i]->next;
+			while (map->hash_t[i] != NULL)
+			{
+				ft_printf("->%d %s\n",i,  map->hash_t[i]->key);
+				map->hash_t[i] = map->hash_t[i]->next;
+			}
+		}
+		i++;
+	}
+	delete_hash_t(map);
+	free(map);
 	return (0);
 }
