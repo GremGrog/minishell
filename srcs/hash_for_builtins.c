@@ -77,28 +77,28 @@ void	delete_hash_t(t_map *head)
 	// t_hasht		*temp;
 
 	i = 0;
-	tmp = (head->hash_t);
+	tmp = head->hash_t;
+	// ft_printf("TMP %s\n", head->hash_t[0]->key);
 	while (i < head->size)
 	{
-		// if ((*tmp)->next != NULL)
-		// {
-		// 	buf = (*tmp)->next;
-		// 	while (buf != NULL)
-		// 	{
-		// 		temp = buf;
-		// 		buf = buf->next;
-		// 		free(temp);
-		// 	}
-		// }
+		if ((*tmp)->next != NULL)
+		{
+			buf = (*tmp)->next;
+			while (buf != NULL)
+			{
+				tmp = &buf;
+				buf = buf->next;
+				free(tmp);
+			}
+		}
 		// else
 		// {
-			buf = (*tmp);
-			if (buf != NULL)
-				free(buf);
-			(*tmp)++;
-			i++;
-
+		// 	buf = *tmp;
+		// 	if (buf != NULL)
+		// 		free(buf);
+		// 	(*tmp)++;
 		// }
+	i++;
 	}
 	// free(head);
 }

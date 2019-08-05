@@ -94,9 +94,9 @@ $(NAME): $(DIR_O) $(OBJF)
 	@ranlib $(NAME)
 
 clean:
-	@/bin/rm -rf $(DIR_O)
+	/bin/rm -rf $(DIR_O)
 
 fclean: clean
-	@/bin/rm -f $(NAME)
+	/bin/rm -f $(NAME)
 
 re: fclean all

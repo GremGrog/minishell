@@ -30,7 +30,14 @@ char	*search_builtin(char *path, char *co_name)
 	free(tmp);
 	free(buf);
 	if (access(full_path, F_OK) == 0)
+	{
+		if (access(full_path, X_OK) == -1)
+		{
+			ft_printf("error: no rights to execute");
+			exit(2);
+		}
 		return (full_path);
+	}
 	else
 		free(full_path);
 	return (NULL);
@@ -49,10 +56,13 @@ char	*get_builtin(char *co_name)
 		return (NULL);
 	full_filename = NULL;
 	i = 0;
-	while (g_env->envp[12][i] != '=')
+	j = 0;
+	while (ft_strncmp(g_env->envp[i], "PATH", 4) != 0)
 		i++;
-	i++;
-	path = ft_strsplit(&g_env->envp[12][i], ':');
+	while (g_env->envp[i][j++] != '=')
+		;
+	j++;
+	path = ft_strsplit(g_env->envp[i], ':');
 	j = 0;
 	while (path[j] != NULL)
 	{

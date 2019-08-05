@@ -62,39 +62,41 @@ void	mini_loop(void)
 
 int main(int argc, char **argv, char **env)
 {
-	t_map	*map;
-	int		i = 0;
+	// t_map	*map;
+	// t_map	*output_buf;
+	// int		i = 0;
 	if (!argc && !argv && !env)
 		return (-1);
-	// init_env();
-	// copy_matrix(env);
-	// mini_loop();
-	map = create_hash_table(3);
-	add_elem_to_hasht(map, "cd", NULL);
+	init_env();
+	copy_matrix(env);
+	mini_loop();
+	// map = create_hash_table(3);
+	// add_elem_to_hasht(map, "cd", NULL);
 	// add_elem_to_hasht(map, "cd", NULL);
 	// add_elem_to_hasht(map, "kek", NULL);
 	// add_elem_to_hasht(map, "dok", NULL);
-	while (i < 3)
-	{
-		if (!map->hash_t[i])
-		{
-			i++;
-			continue ;
-		}
-		if (map->hash_t[i]->key != NULL)
-			ft_printf("%d %s\n", i, map->hash_t[i]->key);
-		if (map->hash_t[i]->next)
-		{
-			map->hash_t[i] = map->hash_t[i]->next;
-			while (map->hash_t[i] != NULL)
-			{
-				ft_printf("->%d %s\n",i,  map->hash_t[i]->key);
-				map->hash_t[i] = map->hash_t[i]->next;
-			}
-		}
-		i++;
-	}
-	delete_hash_t(map);
-	free(map);
+	// output_buf = map;
+	// // while (i < 3)
+	// // {
+	// // 	if (!output_buf->hash_t[i])
+	// // 	{
+	// // 		i++;
+	// // 		continue ;
+	// // 	}
+	// // 	if (output_buf->hash_t[i]->key != NULL)
+	// // 		ft_printf("%d %s\n", i, output_buf->hash_t[i]->key);
+	// // 	if (output_buf->hash_t[i]->next)
+	// // 	{
+	// // 		output_buf->hash_t[i] = output_buf->hash_t[i]->next;
+	// // 		while (output_buf->hash_t[i] != NULL)
+	// // 		{
+	// // 			ft_printf("->%d %s\n",i,  output_buf->hash_t[i]->key);
+	// // 		output_buf->hash_t[i] = output_buf->hash_t[i]->next;
+	// // 		}
+	// // 	}
+	// // 	i++;
+	// // }
+	// delete_hash_t(map);
+	// free(map);
 	return (0);
 }
