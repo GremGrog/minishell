@@ -22,6 +22,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <limits.h>
 # include "ft_printf/MainHeader/ft_printf.h"
 
 typedef struct	s_env
@@ -64,11 +65,17 @@ int				g_htabsize;
 
 t_env			*g_env;
 void			init_env(void);
-void			copy_matrix(char **env);
+void			delete_env(void);
+void			copy_env(char **env);
+
+t_co			*get_commands_to_exec(t_args *args);
+void			exec_command(t_args *argv, t_co *co_exec);
+void			cd_builtin(char *argv);
+void			env_builtin(char *argv);
+void			setenv_builtin(char *args);
+
 t_map			*create_hash_table(int hasht_size);
 void			add_elem_to_hasht(t_map *head, char *key, void *value);
 void			delete_hash_t(t_map *head);
-t_co			*get_commands_to_exec(t_args *args);
-void			exec_command(t_args *argv, t_co *co_exec);
-void			cd_builtin(char *path);
+
 #endif

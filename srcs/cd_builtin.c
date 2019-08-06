@@ -40,28 +40,52 @@ void	cd_errors(char *path)
 		ft_printf("cd: permission denied: %s\n", path);
 }
 
-void	change_pwd_env(int len)
+void	change_old_pwd_env(char *old_pwd)
 {
 	int		i;
 	int		j;
-	char	*buf;
-	char	*temp;
-	int		pwd_len;
+	char	*tmp;
 
 	i = 0;
 	j = 0;
-	pwd_len = ft_strlen(g_pwd) + len;
+	while (ft_strncmp(g_env->envp[i], "OLDPWD", 6) != 0)
+		i++;
+	while (g_env->envp[i][j++] != '=')
+		;
+	j++;
+	free(g_env->envp[i]);
+	tmp = ft_strjoin(g_old_pwd, old_pwd);
+	g_env->envp[i] = (char*)malloc(sizeof(char) * ft_strlen(tmp) + 1);
+	ft_strcpy(g_env->envp[i], tmp);
+	free(tmp);
+}
+
+void	change_pwd_env(void)
+{
+	int		i;
+	int		j;
+	char	*new_pwd;
+	char	*old_pwd;
+	char	*tmp;
+
+	i = 0;
+	j = 0;
 	while (ft_strncmp(g_env->envp[i], "PWD", 3) != 0)
 		i++;
 	while (g_env->envp[i][j++] != '=')
 		;
 	j++;
-	buf = ft_strsub(g_env->envp[i], j, ft_strlen(g_env->envp[i]));
+	old_pwd = ft_strsub(g_env->envp[i], j, ft_strlen(g_env->envp[i]));
 	free(g_env->envp[i]);
-	temp = (char*)malloc(sizeof(char) * 100);
-	temp = getcwd(temp, 100);
-	g_env->envp[i] = (char*)malloc(sizeof(char) * pwd_len + 1);
-
+	new_pwd = (char*)malloc(sizeof(char) * PATH_MAX);
+	new_pwd = getcwd(new_pwd, PATH_MAX);
+	tmp = ft_strjoin(g_pwd, new_pwd);
+	g_env->envp[i] = (char*)malloc(sizeof(char) * ft_strlen(tmp) + 1);
+	ft_strcpy(g_env->envp[i], tmp);
+	free(tmp);
+	free(new_pwd);
+	change_old_pwd_env(old_pwd);
+	free(old_pwd);
 }
 
 void	cd_builtin(char *argv)
@@ -81,12 +105,9 @@ void	cd_builtin(char *argv)
 		path = search_home_dir();
 		f = 1;
 	}
-	(r = chdir(path)) == 0 ? change_pwd_env(ft_strlen(path)) : cd_errors(path);
-	// if ((r = chdir(path)) == -1)
-	// 	cd_errors(path);
-	// else
-	// 	change_pwd_env(path);
+	(r = chdir(path)) == 0 ? change_pwd_env() : cd_errors(path);
 	if (f == 1)
 		free(path);
+	del_matrix(args);
 	free(args);
 }

@@ -23,12 +23,12 @@ PRINTF_LIB = ft_printf/libftprintf.a
 DIR_O = obj
 
 SRCF = srcs/main.c \
-		srcs/copy_matrix.c \
 		srcs/init_env.c \
 		srcs/hash_for_builtins.c \
 		srcs/get_command_to_exec.c \
 		srcs/execute.c \
-		srcs/cd_builtin.c
+		srcs/cd_builtin.c \
+		srcs/env_builtins.c
 
 OBJF = $(addprefix $(DIR_O)/,$(patsubst %.c,%.o,$(SRCF)))
 

@@ -68,8 +68,9 @@ int main(int argc, char **argv, char **env)
 	if (!argc && !argv && !env)
 		return (-1);
 	init_env();
-	copy_matrix(env);
+	copy_env(env);
 	mini_loop();
+	delete_env();
 	// map = create_hash_table(3);
 	// add_elem_to_hasht(map, "cd", NULL);
 	// add_elem_to_hasht(map, "cd", NULL);

@@ -74,36 +74,54 @@ char	*get_builtin(char *co_name)
 	return (full_filename);
 }
 
-void	exec_command(t_args *argv, t_co *co_exec)
+void	exec_custom_builtins(void (*f)(char*), char *argv)
+{
+	pid_t	pid;
+	pid_t	wpid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+		(*f)(argv);
+	else
+		wpid = waitpid(pid, &status, WUNTRACED);
+}
+
+void	exec_system_builtins(t_co *co_exec)
 {
 	char	*full_filename;
 	pid_t	pid;
 	pid_t	wpid;
 	int		status;
+
+	full_filename = get_builtin(co_exec->co_name);
+	if (full_filename)
+	{
+		pid = fork();
+		if (pid == 0)
+			execve(full_filename, co_exec->co_args,	g_env->envp);
+		else
+			wpid = waitpid(pid, &status, WUNTRACED);
+	}
+	free(full_filename);
+}
+
+void	exec_command(t_args *argv, t_co *co_exec)
+{
 	int		i;
 
 	i = 0;
 	while (argv->argv[i])
 	{
 		if (ft_strcmp(co_exec->co_name, "cd") == 0)
-		{
-			pid = fork();
-			if (pid == 0)
-				cd_builtin(argv->argv[i]);
-			else
-				wpid = waitpid(pid, &status, WUNTRACED);
-		}
-		full_filename = get_builtin(co_exec->co_name);
-		if (full_filename)
-		{
-			pid = fork();
-			if (pid == 0)
-				execve(full_filename, co_exec->co_args,	g_env->envp);
-			else
-				wpid = waitpid(pid, &status, WUNTRACED);
-		}
+			exec_custom_builtins(cd_builtin, argv->argv[i]);
+		else if (ft_strcmp(co_exec->co_name, "env") == 0)
+			exec_custom_builtins(env_builtin, argv->argv[i]);
+		else if (ft_strcmp(co_exec->co_name, "setenv") == 0)
+			exec_custom_builtins(setenv_builtin, argv->argv[i]);
+		else
+			exec_system_builtins(co_exec);
 		i++;
 		co_exec = co_exec->next;
-		free(full_filename);
 	}
 }

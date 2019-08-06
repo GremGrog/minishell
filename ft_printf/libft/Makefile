@@ -75,6 +75,7 @@ SRCS = ft_atoi.c \
 		ft_tolower.c \
 		ft_toupper.c \
 		get_next_line.c \
+		delete_matrix.c \
 
 OBJF = $(addprefix $(DIR_O)/,$(patsubst %.c,%.o,$(SRCS)))
 
