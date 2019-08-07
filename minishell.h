@@ -32,25 +32,10 @@ typedef struct	s_env
 	int			used_size;
 }				t_env;
 
-typedef struct	s_hasht
-{
-	void			*key;
-	void			*value;
-	struct s_hasht	*next;
-}				t_hasht;
-
-typedef struct	s_map
-{
-	t_hasht		**hash_t;
-	int			size;
-	void		*hash_func;
-}				t_map;
-
 typedef struct	s_args
 {
 	char			**argv;
 	int				size;
-	struct s_args	*next;
 }				t_args;
 
 typedef struct	s_co
@@ -61,21 +46,22 @@ typedef struct	s_co
 	struct s_co		*next;
 }				t_co;
 
-int				g_htabsize;
-
 t_env			*g_env;
 void			init_env(void);
 void			delete_env(void);
 void			copy_env(char **env);
+void			add_mem_env(void);
+void			print_env(void);
 
 t_co			*get_commands_to_exec(t_args *args);
 void			exec_command(t_args *argv, t_co *co_exec);
-void			cd_builtin(char *argv);
-void			env_builtin(char *argv);
-void			setenv_builtin(char *args);
+void			cd_builtin(char **argv);
+void			env_builtin(char **argv);
+void			setenv_builtin(char **argv);
+void			unsetenv_builtin(char **argv);
+void			echo_builtin(char **argv);
+void			exit_builtin(t_args *argv, t_co *co_exec);
 
-t_map			*create_hash_table(int hasht_size);
-void			add_elem_to_hasht(t_map *head, char *key, void *value);
-void			delete_hash_t(t_map *head);
+void			del_co_list(t_co *co_exec);
 
 #endif

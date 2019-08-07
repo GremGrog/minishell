@@ -31,7 +31,8 @@ t_co	*get_command_name(char *com)
 		i++;
 	co_to_exec->co_name = (char*)malloc(sizeof(char) * i + 1);
 	ft_strncpy(co_to_exec->co_name, com, i);
-	co_to_exec->co_name[i + 1] = '\0';
+	i++;
+	co_to_exec->co_name[i] = '\0';
 	co_to_exec->next = NULL;
 	return (co_to_exec);
 }

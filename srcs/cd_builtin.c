@@ -88,15 +88,13 @@ void	change_pwd_env(void)
 	free(old_pwd);
 }
 
-void	cd_builtin(char *argv)
+void	cd_builtin(char **args)
 {
 	int		r;
 	int		f;
 	char	*path;
-	char	**args;
 
 	f = 0;
-	args = ft_strsplit(argv, ' ');
 	path = NULL;
 	if (args[1] != NULL && args[1][0] != '~')
 		path = args[1];

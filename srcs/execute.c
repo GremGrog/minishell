@@ -34,12 +34,12 @@ char	*search_builtin(char *path, char *co_name)
 		if (access(full_path, X_OK) == -1)
 		{
 			ft_printf("error: no rights to execute");
-			exit(2);
+			free(full_path);
+			return (NULL);
 		}
 		return (full_path);
 	}
-	else
-		free(full_path);
+	free(full_path);
 	return (NULL);
 }
 
@@ -51,8 +51,6 @@ char	*get_builtin(char *co_name)
 	char	*full_filename;
 
 	if (!co_name)
-		return (NULL);
-	if (ft_strcmp(co_name, "cd") == 0)
 		return (NULL);
 	full_filename = NULL;
 	i = 0;
@@ -71,10 +69,12 @@ char	*get_builtin(char *co_name)
 			break ;
 		j++;
 	}
+	del_matrix(path);
+	free(path);
 	return (full_filename);
 }
 
-void	exec_custom_builtins(void (*f)(char*), char *argv)
+void	exec_custom_builtins(void (*f)(char**), char **argv)
 {
 	pid_t	pid;
 	pid_t	wpid;
@@ -84,7 +84,7 @@ void	exec_custom_builtins(void (*f)(char*), char *argv)
 	if (pid == 0)
 		(*f)(argv);
 	else
-		wpid = waitpid(pid, &status, WUNTRACED);
+		wpid = wait(&status);
 }
 
 void	exec_system_builtins(t_co *co_exec)
@@ -95,33 +95,43 @@ void	exec_system_builtins(t_co *co_exec)
 	int		status;
 
 	full_filename = get_builtin(co_exec->co_name);
-	if (full_filename)
+	if (full_filename == NULL)
+		ft_printf("minishell: command not found: %s\n", co_exec->co_name);
+	else
 	{
 		pid = fork();
 		if (pid == 0)
 			execve(full_filename, co_exec->co_args,	g_env->envp);
 		else
-			wpid = waitpid(pid, &status, WUNTRACED);
+			wpid = wait(&status);
+		free(full_filename);
 	}
-	free(full_filename);
 }
 
 void	exec_command(t_args *argv, t_co *co_exec)
 {
 	int		i;
+	t_co	*tmp;
 
 	i = 0;
+	tmp = co_exec->next;
 	while (argv->argv[i])
 	{
-		if (ft_strcmp(co_exec->co_name, "cd") == 0)
-			exec_custom_builtins(cd_builtin, argv->argv[i]);
-		else if (ft_strcmp(co_exec->co_name, "env") == 0)
-			exec_custom_builtins(env_builtin, argv->argv[i]);
-		else if (ft_strcmp(co_exec->co_name, "setenv") == 0)
-			exec_custom_builtins(setenv_builtin, argv->argv[i]);
+		if (ft_strcmp(tmp->co_name, "cd") == 0)
+			exec_custom_builtins(cd_builtin, tmp->co_args);
+		else if (ft_strcmp(tmp->co_name, "env") == 0)
+			exec_custom_builtins(env_builtin, tmp->co_args);
+		else if (ft_strcmp(tmp->co_name, "setenv") == 0)
+			exec_custom_builtins(setenv_builtin, tmp->co_args);
+		else if (ft_strcmp(tmp->co_name, "unsetenv") == 0)
+			exec_custom_builtins(unsetenv_builtin, tmp->co_args);
+		else if (ft_strcmp(tmp->co_name, "echo") == 0)
+			exec_custom_builtins(echo_builtin, tmp->co_args);
+		else if (ft_strcmp(tmp->co_name, "exit") == 0)
+			exit_builtin(argv, co_exec);
 		else
-			exec_system_builtins(co_exec);
+			exec_system_builtins(tmp);
 		i++;
-		co_exec = co_exec->next;
+		tmp = tmp->next;
 	}
 }

@@ -18,5 +18,9 @@ void	del_matrix(char **matrix)
 
 	i = 0;
 	while (matrix[i])
-		free(matrix[i++]);
+	{
+		free(matrix[i]);
+		matrix[i] = NULL;
+		i++;
+	}
 }

@@ -30,8 +30,7 @@ void	delete_env(void)
 	int	i;
 
 	i = 0;
-	while (g_env->envp[i] != NULL)
-		free(g_env->envp[i++]);
+	del_matrix(g_env->envp);
 	g_env->mem_size = 0;
 	g_env->used_size = 0;
 	free(g_env->envp);
@@ -50,4 +49,24 @@ void	copy_env(char **env)
 		g_env->used_size++;
 	}
 	g_env->envp[i] = NULL;
+}
+
+void	add_mem_env(void)
+{
+	char	**tmp;
+	int		i;
+
+	i = 0;
+	g_env->mem_size += 50;
+	tmp =  (char**)malloc(sizeof(char*) * g_env->mem_size);
+	while (g_env->envp[i] != NULL)
+	{
+		tmp[i] = ft_strdup(g_env->envp[i]);
+		free(g_env->envp[i]);
+		i++;
+	}
+	g_env->used_size = 0;
+	copy_env(tmp);
+	del_matrix(tmp);
+	free(tmp);
 }

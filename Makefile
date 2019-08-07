@@ -24,11 +24,14 @@ DIR_O = obj
 
 SRCF = srcs/main.c \
 		srcs/init_env.c \
-		srcs/hash_for_builtins.c \
 		srcs/get_command_to_exec.c \
 		srcs/execute.c \
 		srcs/cd_builtin.c \
-		srcs/env_builtins.c
+		srcs/env_builtins.c \
+		srcs/setenv_builtin.c \
+		srcs/unsetenv_builtin.c \
+		srcs/echo_builtin.c \
+		srcs/exit_builtin.c \
 
 OBJF = $(addprefix $(DIR_O)/,$(patsubst %.c,%.o,$(SRCF)))
 
