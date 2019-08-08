@@ -58,7 +58,7 @@ void	add_mem_env(void)
 
 	i = 0;
 	g_env->mem_size += 50;
-	tmp =  (char**)malloc(sizeof(char*) * g_env->mem_size);
+	tmp = (char**)malloc(sizeof(char*) * g_env->mem_size);
 	while (g_env->envp[i] != NULL)
 	{
 		tmp[i] = ft_strdup(g_env->envp[i]);

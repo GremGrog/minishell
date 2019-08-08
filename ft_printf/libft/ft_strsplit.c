@@ -48,7 +48,7 @@ static char				**ft_me(const char *s, char **arr, char c)
 	i = 0;
 	j = 0;
 	len = 0;
-	if (!(arr = (char**)malloc(sizeof(char*) * ft_countwd(s, c) + 1)))
+	if (!(arr = (char **)malloc(sizeof(char *) * (ft_countwd(s, c) + 1))))
 		return (NULL);
 	while (j < ft_countwd(s, c))
 	{
@@ -60,7 +60,7 @@ static char				**ft_me(const char *s, char **arr, char c)
 		}
 		if (len != 0)
 		{
-			if (!(arr[j++] = (char *)malloc(sizeof(char) * (len) + 1)))
+			if (!(arr[j++] = (char *)malloc(sizeof(char) * (len) + 2)))
 				ft_freemem(&arr, j);
 		}
 		i++;

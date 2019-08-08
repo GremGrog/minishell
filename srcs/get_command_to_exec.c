@@ -20,21 +20,27 @@ void	add_node_co(t_co *head, t_co *node)
 	node->next = NULL;
 }
 
-t_co	*get_command_name(char *com)
+void	get_command_name(char *com, t_co *co_to_exec)
 {
-	t_co	*co_to_exec;
+	char	*tmp;
 	int		i;
+	int		len;
 
 	i = 0;
-	co_to_exec = (t_co*)malloc(sizeof(t_co));
-	while (com[i] != ' ' && com[i])
+	len = 0;
+	while (com[len] != ' ' && com[len])
+		len++;
+	tmp = (char*)malloc(sizeof(char) * (len + 2));
+	while (i < len)
+	{
+		tmp[i] = com[i];
 		i++;
-	co_to_exec->co_name = (char*)malloc(sizeof(char) * i + 1);
-	ft_strncpy(co_to_exec->co_name, com, i);
-	i++;
-	co_to_exec->co_name[i] = '\0';
+	}
+	tmp[i] = '\0';
+	co_to_exec->co_name = (char*)malloc(sizeof(char) * (i + 1));
+	ft_strcpy(co_to_exec->co_name, tmp);
+	free(tmp);
 	co_to_exec->next = NULL;
-	return (co_to_exec);
 }
 
 t_co	*get_commands_to_exec(t_args *args)
@@ -53,7 +59,9 @@ t_co	*get_commands_to_exec(t_args *args)
 	head->next = NULL;
 	while (args->argv[i] != NULL)
 	{
-		co_exec = get_command_name(args->argv[i]);
+		co_exec = (t_co*)malloc(sizeof(t_co));
+		co_exec->co_name = NULL;
+		get_command_name(args->argv[i], co_exec);
 		co_exec->index_argv = i;
 		co_exec->co_args = ft_strsplit(args->argv[i], ' ');
 		add_node_co(head, co_exec);

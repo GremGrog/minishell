@@ -55,6 +55,7 @@ void			print_env(void);
 
 t_co			*get_commands_to_exec(t_args *args);
 void			exec_command(t_args *argv, t_co *co_exec);
+char			*search_builtin(char *co_name);
 void			cd_builtin(char **argv);
 void			env_builtin(char **argv);
 void			setenv_builtin(char **argv);

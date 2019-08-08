@@ -26,6 +26,7 @@ SRCF = srcs/main.c \
 		srcs/init_env.c \
 		srcs/get_command_to_exec.c \
 		srcs/execute.c \
+		srcs/search_builtin.c \
 		srcs/cd_builtin.c \
 		srcs/env_builtins.c \
 		srcs/setenv_builtin.c \

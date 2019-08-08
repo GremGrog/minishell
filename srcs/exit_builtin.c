@@ -34,7 +34,6 @@ void	del_co_list(t_co *co_exec)
 
 void	exit_builtin(t_args *argv, t_co *co_exec)
 {
-
 	delete_env();
 	del_matrix(argv->argv);
 	free(argv->argv);
