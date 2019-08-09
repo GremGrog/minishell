@@ -31,8 +31,8 @@ void	ft_copy_temp(char *temp_str, char *temp_final)
 	int i;
 
 	i = g_buffer->buff_size / g_buffer->overflow_counter;
-	ft_memcpy(temp_str, g_buffer->str, i);
-	ft_memcpy(temp_final, g_buffer->final, i);
+	ft_strcpy(temp_str, g_buffer->str);
+	ft_strcpy(temp_final, g_buffer->final);
 	while (i < g_buffer->buff_size)
 	{
 		temp_str[i] = '\0';
@@ -56,7 +56,7 @@ void	check_and_add(int size)
 	char	*temp_str;
 	char	*temp_final;
 
-	if (g_buffer->str_len + size <= g_buffer->buff_size)
+	if (g_buffer->str_len + size < g_buffer->buff_size)
 		return ;
 	while (g_buffer->str_len + size > g_buffer->buff_size)
 	{

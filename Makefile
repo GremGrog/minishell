@@ -28,11 +28,13 @@ SRCF = srcs/main.c \
 		srcs/execute.c \
 		srcs/search_builtin.c \
 		srcs/cd_builtin.c \
-		srcs/env_builtins.c \
+		srcs/env_builtin.c \
 		srcs/setenv_builtin.c \
 		srcs/unsetenv_builtin.c \
 		srcs/echo_builtin.c \
 		srcs/exit_builtin.c \
+		srcs/dollar.c \
+		srcs/read_input.c \
 
 OBJF = $(addprefix $(DIR_O)/,$(patsubst %.c,%.o,$(SRCF)))
 

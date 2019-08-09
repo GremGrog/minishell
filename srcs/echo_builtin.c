@@ -16,16 +16,15 @@ void	echo_builtin(char **argv)
 {
 	int	i;
 	int	n;
+	int	argc;
 
-	i = 1;
 	n = 0;
-	if (ft_strcmp(argv[1], "-n") == 0)
+	argc = get_argc(argv);
+	i = (argc > 1) ? 1 : 0;
+	if (argc > 1)
 	{
-		n = 1;
-		i++;
+		while (argv[i])
+			ft_printf("%s", argv[i++]);
 	}
-	while (argv[i])
-		ft_printf("%s", argv[i++]);
-	if (n == 0)
-		ft_printf("\n");
+	ft_printf("\n");
 }

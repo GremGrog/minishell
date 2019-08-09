@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_builtins.c                                     :+:      :+:    :+:   */
+/*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmasha-h <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/06 15:16:36 by fmasha-h          #+#    #+#             */
-/*   Updated: 2019/08/06 15:16:38 by fmasha-h         ###   ########.fr       */
+/*   Created: 2019/08/09 18:42:51 by fmasha-h          #+#    #+#             */
+/*   Updated: 2019/08/09 18:42:52 by fmasha-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	print_env(void)
-{
-	int	i;
-
-	i = 0;
-	while (g_env->envp[i])
-		ft_printf("%s\n", g_env->envp[i++]);
-}
-
-void	env_builtin(char **argv)
+char	*dollar_sign(char *tmp)
 {
 	int		i;
+	char	*buf;
+	char	*str;
 
-	i = 0;
-	print_env();
-	del_matrix(argv);
-	free(argv);
+	buf = ft_strsub(tmp, 1, ft_strlen(tmp));
+	i = search_var(buf);
+	if (i == -1)
+	{
+		ft_printf("%s: Undefined variable.\n", buf);
+		return (NULL);
+	}
+	str = trim_var(g_env->envp[i]);
+	free(tmp);
+	free(buf);
+	return (str);
 }

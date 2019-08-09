@@ -53,32 +53,61 @@ char	*get_builtin(char *path, char *co_name)
 	}
 }
 
+int		search_var(char *ar)
+{
+	int	i;
+
+	i = 0;
+	while (g_env->envp[i])
+	{
+		if (strncmp(g_env->envp[i], ar, ft_strlen(ar)) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*trim_var(char *var)
+{
+	char	*str;
+	int		i;
+	int		j;
+	int		len;
+
+	j = 0;
+	if ((i = search_var(var)) == -1)
+		return (NULL);
+	while (g_env->envp[i][j] && g_env->envp[i][j++] != '=')
+		;
+	len = ft_strlen(g_env->envp[i]) - j;
+	str = ft_strsub(g_env->envp[i], j, len);
+	return (str);
+}
+
 char	*search_builtin(char *co_name)
 {
 	int		i;
-	char	**path;
-	int		j;
+	char	**path_var;
+	char	*tmp;
 	char	*full_filename;
 
 	if (!co_name)
 		return (NULL);
+	if (access(co_name, F_OK) == 0)
+		return (ft_strdup(co_name));
 	full_filename = NULL;
 	i = 0;
-	j = 0;
-	while (ft_strncmp(g_env->envp[i], "PATH", 4) != 0)
-		i++;
-	path = ft_strsplit(g_env->envp[i], ':');
-	// while (*path[j] != '=')
-	// 	path[j]++;
-	// path[j]++;
-	while (path[j] != NULL)
+	tmp = trim_var("PATH");
+	path_var = ft_strsplit(tmp, ':');
+	while (path_var[i] != NULL)
 	{
-		full_filename = get_builtin(path[j], co_name);
+		full_filename = get_builtin(path_var[i], co_name);
 		if (full_filename != NULL)
 			break ;
-		j++;
+		i++;
 	}
-	del_matrix(path);
-	free(path);
+	del_matrix(path_var);
+	free(path_var);
+	free(tmp);
 	return (full_filename);
 }

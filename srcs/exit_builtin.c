@@ -12,6 +12,17 @@
 
 #include "../minishell.h"
 
+void	del_co(t_co *buf)
+{
+	if (buf->co_args)
+	{
+		del_matrix(buf->co_args);
+		free(buf->co_args);
+	}
+	free(buf->co_name);
+	free(buf);
+}
+
 void	del_co_list(t_co *co_exec)
 {
 	t_co	*buf;
@@ -21,13 +32,7 @@ void	del_co_list(t_co *co_exec)
 	{
 		buf = co_exec;
 		co_exec = co_exec->next;
-		if (buf->co_args)
-		{
-			del_matrix(buf->co_args);
-			free(buf->co_args);
-		}
-		free(buf->co_name);
-		free(buf);
+		del_co(buf);
 	}
 	free(co_exec);
 }

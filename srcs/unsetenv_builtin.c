@@ -15,21 +15,13 @@
 void	del_var(char *var)
 {
 	int	i;
-	int	var_len;
 
-	i = 0;
-	var_len = ft_strlen(var);
-	while (g_env->envp[i])
-	{
-		if (strncmp(g_env->envp[i], var, var_len) == 0)
-		{
-			free(g_env->envp[i]);
-			g_env->envp[i] = NULL;
-			g_env->used_size--;
-			break ;
-		}
-		i++;
-	}
+	i = search_var(var);
+	if (i == -1)
+		return ;
+	free(g_env->envp[i]);
+	g_env->envp[i] = NULL;
+	g_env->used_size--;
 }
 
 void	unsetenv_builtin(char **argv)
@@ -40,13 +32,9 @@ void	unsetenv_builtin(char **argv)
 
 	i = 0;
 	j = 1;
-	len = 0;
-	while (argv[len])
-		len++;
+	len = get_argc(argv);
 	if (len == 1)
 		ft_printf("unsetenv: Too few arguments.\n");
 	while (argv[j])
 		del_var(argv[j++]);
-	del_matrix(argv);
-	free(argv);
 }

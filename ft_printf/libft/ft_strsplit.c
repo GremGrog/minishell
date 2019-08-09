@@ -53,9 +53,9 @@ static char				**ft_me(const char *s, char **arr, char c)
 	while (j < ft_countwd(s, c))
 	{
 		len = 0;
-		while (s[i] != c && s[i] != '\0')
+		while (s[i] && s[i] != c)
 		{
-			if (s[i++] != c && s[i] != '\0')
+			if (s[i] && s[i++] != c)
 				len++;
 		}
 		if (len != 0)

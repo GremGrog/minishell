@@ -23,7 +23,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 		str = (char*)malloc(sizeof(char) * len + 1);
 		if (str == 0)
 			return (NULL);
-		while (i < len && s[start] != '\0')
+		while (s[start] != '\0' && i < len)
 		{
 			str[i] = s[start];
 			start++;

@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   delete_matrix.c                                    :+:      :+:    :+:   */
+/*   env_builtins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmasha-h <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/06 16:03:31 by fmasha-h          #+#    #+#             */
-/*   Updated: 2019/08/06 16:03:34 by fmasha-h         ###   ########.fr       */
+/*   Created: 2019/08/06 15:16:36 by fmasha-h          #+#    #+#             */
+/*   Updated: 2019/08/06 15:16:38 by fmasha-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-void	del_matrix(char **matrix)
+void	print_env(void)
 {
 	int	i;
 
 	i = 0;
-	while (matrix[i])
-	{
-		if (matrix[i])
-			free(matrix[i]);
-		matrix[i] = NULL;
-		i++;
-	}
+	while (g_env->envp[i])
+		ft_printf("%s\n", g_env->envp[i++]);
+}
+
+void	env_builtin(void)
+{
+	print_env();
 }
