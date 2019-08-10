@@ -19,11 +19,16 @@ void	mini_loop(void)
 	t_co	*co_exec;
 
 	input = NULL;
+	g_handler = 0;
+	signal(SIGINT, ctrl_c_handler);
 	while (1)
 	{
 		co_exec = NULL;
 		args = (t_args*)malloc(sizeof(t_args));
-		write(1, "*_*/` ", 6);
+		if (g_handler == 0)
+			write(1, "*_*/` ", 6);
+		else
+			g_handler = 0;
 		input = get_input();
 		if (parse_input(input, args) != -1)
 		{

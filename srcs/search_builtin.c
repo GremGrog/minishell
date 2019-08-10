@@ -97,7 +97,8 @@ char	*search_builtin(char *co_name)
 		return (ft_strdup(co_name));
 	full_filename = NULL;
 	i = 0;
-	tmp = trim_var("PATH");
+	if ((tmp = trim_var("PATH")) == NULL)
+		return (NULL);
 	path_var = ft_strsplit(tmp, ':');
 	while (path_var[i] != NULL)
 	{

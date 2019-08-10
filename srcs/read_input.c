@@ -36,6 +36,14 @@ int		parse_input(char *input, t_args *args)
 	return (0);
 }
 
+void	ctrl_c_handler(int sig)
+{
+		sig = 0;
+		write(0, "\n", 1);
+		write(1, "*_*/` ", 6);
+		g_handler = 1;
+}
+
 char	*add_memo(char *input, int buf_size)
 {
 	char	*tmp;
@@ -64,7 +72,7 @@ char	*read_input(char *input, int buf_size)
 	{
 		if (symb == '\n')
 		{
-			input[i] = '\0';
+			g_handler = 0;
 			break ;
 		}
 		input[i] = symb;

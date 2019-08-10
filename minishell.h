@@ -46,6 +46,8 @@ typedef struct	s_co
 }				t_co;
 
 t_env			*g_env;
+int				g_handler;
+
 void			init_env(void);
 void			delete_env(void);
 void			copy_env(char **env);
@@ -54,7 +56,7 @@ void			print_env(void);
 char			*get_input(void);
 int				parse_input(char *input, t_args *args);
 char			*dollar_sign(char *tmp);
-
+void			ctrl_c_handler(int sig);
 int				search_var(char *ar);
 char			*trim_var(char *var);
 int				get_argc(char **argv);

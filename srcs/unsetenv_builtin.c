@@ -14,27 +14,42 @@
 
 void	del_var(char *var)
 {
-	int	i;
+	int		var_index;
+	int		i;
+	int		j;
+	char	**arr;
 
-	i = search_var(var);
-	if (i == -1)
+	if ((var_index = search_var(var)) == -1)
 		return ;
-	free(g_env->envp[i]);
-	g_env->envp[i] = NULL;
-	g_env->used_size--;
+	i = 0;
+	j = 0;
+	arr = (char**)malloc(sizeof(char*) * g_env->mem_size);
+	while (g_env->envp[i])
+	{
+		if (i == var_index)
+			i++;
+		else
+			arr[j++] = ft_strdup(g_env->envp[i++]);
+	}
+	delete_env();
+	init_env();
+	copy_env(arr);
+	del_matrix(arr);
+	free(arr);
 }
 
 void	unsetenv_builtin(char **argv)
 {
-	int		i;
 	int		j;
 	int		len;
 
-	i = 0;
-	j = 1;
+	j = 0;
 	len = get_argc(argv);
 	if (len == 1)
+	{
 		ft_printf("unsetenv: Too few arguments.\n");
+		return ;
+	}
 	while (argv[j])
 		del_var(argv[j++]);
 }
