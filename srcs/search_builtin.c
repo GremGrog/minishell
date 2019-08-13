@@ -12,16 +12,28 @@
 
 #include "../minishell.h"
 
+int		is_it_dir(char *full_path)
+{
+	struct stat buff;
+
+	stat(full_path, &buff);
+	if (S_ISDIR(buff.st_mode))
+		return (-1);
+	return (0);
+}
+
 int		check_builtin(char *full_path)
 {
-	if (access(full_path, F_OK) == 0)
+	if (access(full_path, 0) == 0)
 	{
-		if (access(full_path, X_OK) == -1)
+		if (access(full_path, 1) == -1)
 		{
 			ft_printf("error: no rights to execute");
 			free(full_path);
 			return (0);
 		}
+		if (is_it_dir(full_path) == -1)
+			return (0);
 		return (1);
 	}
 	return (0);
@@ -93,8 +105,13 @@ char	*search_builtin(char *co_name)
 
 	if (!co_name)
 		return (NULL);
-	if (access(co_name, F_OK) == 0)
-		return (ft_strdup(co_name));
+	if (co_name[0] == '/')
+	{
+		if (check_builtin(co_name) == 1)
+			return (ft_strdup(co_name));
+		else
+			return (NULL);
+	}
 	full_filename = NULL;
 	i = 0;
 	if ((tmp = trim_var("PATH")) == NULL)

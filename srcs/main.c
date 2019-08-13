@@ -16,31 +16,21 @@ void	mini_loop(void)
 {
 	char	*input;
 	t_args	*args;
-	t_co	*co_exec;
 
 	input = NULL;
 	g_handler = 0;
 	signal(SIGINT, ctrl_c_handler);
 	while (1)
 	{
-		co_exec = NULL;
+
 		args = (t_args*)malloc(sizeof(t_args));
 		if (g_handler == 0)
 			write(1, "*_*/` ", 6);
 		else
 			g_handler = 0;
 		input = get_input();
-		if (parse_input(input, args) != -1)
-		{
-			if (args == NULL)
-				break ;
-			co_exec = get_commands_to_exec(args);
-			exec_command(args, co_exec->next);
-			del_matrix(args->argv);
-			free(args->argv);
-		}
+		parse_input(input, args);
 		free(args);
-		free(co_exec);
 		input = NULL;
 	}
 	delete_env();

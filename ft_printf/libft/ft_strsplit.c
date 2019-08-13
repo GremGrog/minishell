@@ -60,7 +60,7 @@ static char				**ft_me(const char *s, char **arr, char c)
 		}
 		if (len != 0)
 		{
-			if (!(arr[j++] = (char *)malloc(sizeof(char) * (len) + 2)))
+			if (!(arr[j++] = ft_memalloc(len + 2)))
 				ft_freemem(&arr, j);
 		}
 		i++;

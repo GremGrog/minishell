@@ -64,6 +64,7 @@ void	cd_builtin(char **args)
 	int		r;
 	int		f;
 	char	*path;
+	char	*buf;
 
 	f = 1;
 	path = NULL;
@@ -73,9 +74,18 @@ void	cd_builtin(char **args)
 		path = args[1];
 		f = 0;
 	}
-	else if (args[1] == NULL || args[1][0] == '~')
+	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
 		path = trim_var("HOME");
-	else if (args[1] != NULL && (ft_strcmp(args[1], "-") == 0))
+	if (args[1][0] == '~' && args[1][1] != '\0')
+	{
+		path = trim_var("HOME");
+		buf = ft_strjoin(path, args[1]);
+		free(path);
+		path = ft_strdup(buf);
+		free(buf);
+		f = 1;
+	}
+	if (args[1] != NULL && (ft_strcmp(args[1], "-") == 0))
 		path = trim_var("OLDPWD");
 	(r = chdir(path)) == 0 ? change_pwd_env() : cd_errors(path);
 	if (f == 1)

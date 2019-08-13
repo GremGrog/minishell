@@ -18,15 +18,43 @@ char	*dollar_sign(char *tmp)
 	char	*buf;
 	char	*str;
 
-	buf = ft_strsub(tmp, 1, ft_strlen(tmp));
+	buf = ft_strsub(tmp, 1, ft_strlen(tmp) - 1);
 	i = search_var(buf);
 	if (i == -1)
 	{
-		ft_printf("%s: Undefined variable.\n", buf);
+		free(buf);
 		return (NULL);
 	}
 	str = trim_var(g_env->envp[i]);
-	free(tmp);
 	free(buf);
 	return (str);
+}
+
+char	**check_dollar(char **argv)
+{
+	int		i;
+	char	*tmp;
+	char	*buf;
+
+	i = 0;
+	while (argv[i])
+	{
+		tmp = ft_strtrim(argv[i]);
+		free(argv[i]);
+		argv[i] = NULL;
+		if (tmp[0] == '$')
+		{
+			buf = dollar_sign(tmp);
+			if (buf)
+			{
+				argv[i] = ft_strdup(buf);
+				free(buf);
+			}
+		}
+		else
+			argv[i] = ft_strdup(tmp);
+		free(tmp);
+		i++;
+	}
+	return (argv);
 }

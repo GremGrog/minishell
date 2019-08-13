@@ -54,12 +54,13 @@ void			copy_env(char **env);
 void			add_mem_env(void);
 void			print_env(void);
 char			*get_input(void);
-int				parse_input(char *input, t_args *args);
+void			parse_input(char *input, t_args *args);
 char			*dollar_sign(char *tmp);
 void			ctrl_c_handler(int sig);
 int				search_var(char *ar);
 char			*trim_var(char *var);
 int				get_argc(char **argv);
+char**			check_dollar(char **argv);
 
 t_co			*get_commands_to_exec(t_args *args);
 void			exec_command(t_args *argv, t_co *co_exec);

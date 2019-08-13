@@ -46,7 +46,7 @@ void	add_var(char **ar, int len, int v_i)
 	int		i;
 	int		var_len;
 
-	i = ((v_i == -1) ? g_env->used_size++ : 0);
+	i = ((v_i == -1) ? g_env->used_size++ : v_i);
 	var_len = ft_strlen(ar[1]);
 	if (len == 2)
 	{
@@ -57,6 +57,8 @@ void	add_var(char **ar, int len, int v_i)
 	}
 	if (len == 3)
 	{
+		if (v_i != -1)
+			free(g_env->envp[i]);
 		if (!(g_env->envp[i] =
 		(char*)malloc(sizeof(char) * (var_len + ft_strlen(ar[2])) + 2)))
 			return ;

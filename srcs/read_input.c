@@ -12,36 +12,32 @@
 
 #include "../minishell.h"
 
-int		parse_input(char *input, t_args *args)
+void		parse_input(char *input, t_args *args)
 {
-	char	*tmp;
+	t_co	*co_exec;
 
 	if (!input)
-		return (-1);
+		return ;
 	args->size = 0;
 	args->argv = ft_strsplit(input, ';');
-	while (args->argv[args->size] != NULL)
-	{
-		tmp = ft_strtrim(args->argv[args->size]);
-		if (tmp[0] == '$')
-			tmp = dollar_sign(tmp);
-		if (tmp == NULL)
-			return (-1);
-		free(args->argv[args->size]);
-		args->argv[args->size] = ft_strdup(tmp);
-		free(tmp);
-		args->size++;
-	}
+	args->argv = check_dollar(args->argv);
+	while (args->argv[args->size++])
+		;
 	free(input);
-	return (0);
+	co_exec = NULL;
+	co_exec = get_commands_to_exec(args);
+	exec_command(args, co_exec->next);
+	del_matrix(args->argv);
+	free(args->argv);
+	free(co_exec);
 }
 
 void	ctrl_c_handler(int sig)
 {
-		sig = 0;
-		write(0, "\n", 1);
-		write(1, "*_*/` ", 6);
-		g_handler = 1;
+	sig = 0;
+	write(0, "\n", 1);
+	write(1, "*_*/` ", 6);
+	g_handler = 1;
 }
 
 char	*add_memo(char *input, int buf_size)

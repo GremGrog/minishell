@@ -60,8 +60,10 @@ t_co	*get_commands_to_exec(t_args *args)
 	{
 		co_exec = (t_co*)malloc(sizeof(t_co));
 		co_exec->co_name = NULL;
+		co_exec->co_args = NULL;
 		get_command_name(args->argv[i], co_exec);
 		co_exec->co_args = ft_strsplit(args->argv[i], ' ');
+		co_exec->co_args = check_dollar(co_exec->co_args);
 		add_node_co(head, co_exec);
 		i++;
 	}
