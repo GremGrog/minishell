@@ -61,7 +61,6 @@ int				search_var(char *ar);
 char			*trim_var(char *var);
 int				get_argc(char **argv);
 char**			check_dollar(char **argv);
-
 t_co			*get_commands_to_exec(t_args *args);
 void			exec_command(t_args *argv, t_co *co_exec);
 char			*search_builtin(char *co_name);

@@ -12,33 +12,6 @@
 
 #include "../minishell.h"
 
-int		is_it_dir(char *full_path)
-{
-	struct stat buff;
-
-	stat(full_path, &buff);
-	if (S_ISDIR(buff.st_mode))
-		return (-1);
-	return (0);
-}
-
-int		check_builtin(char *full_path)
-{
-	if (access(full_path, 0) == 0)
-	{
-		if (access(full_path, 1) == -1)
-		{
-			ft_printf("error: no rights to execute");
-			free(full_path);
-			return (0);
-		}
-		if (is_it_dir(full_path) == -1)
-			return (0);
-		return (1);
-	}
-	return (0);
-}
-
 char	*get_builtin(char *path, char *co_name)
 {
 	char	*full_path;
@@ -56,7 +29,7 @@ char	*get_builtin(char *path, char *co_name)
 	full_path = ft_strcpy(full_path, buf);
 	free(tmp);
 	free(buf);
-	if (check_builtin(full_path) == 1)
+	if (access(full_path, 0) == 0)
 		return (full_path);
 	else
 	{
@@ -96,6 +69,25 @@ char	*trim_var(char *var)
 	return (str);
 }
 
+char	*get_exec_path(char *co_name)
+{
+	char	*tmp;
+	char	*buf;
+	char	*path;
+
+	tmp = (char*)malloc(sizeof(char) * PATH_MAX);
+	getcwd(tmp, PATH_MAX);
+	buf = ft_strsub(co_name, 1, ft_strlen(co_name));
+	path = ft_strjoin(tmp, buf);
+	free(tmp);
+	free(buf);
+	if (!(buf = (char*)malloc(sizeof(char) * (ft_strlen(path) + 1))))
+		return (NULL);
+	ft_strcpy(buf, path);
+	free(path);
+	return (buf);
+}
+
 char	*search_builtin(char *co_name)
 {
 	int		i;
@@ -106,23 +98,18 @@ char	*search_builtin(char *co_name)
 	if (!co_name)
 		return (NULL);
 	if (co_name[0] == '/')
-	{
-		if (check_builtin(co_name) == 1)
-			return (ft_strdup(co_name));
-		else
-			return (NULL);
-	}
+		return ((access(co_name, 0) == 0) ? ft_strdup(co_name) : NULL);
+	if (co_name[0] == '.' && co_name[1] == '/')
+		return (get_exec_path(co_name));
 	full_filename = NULL;
-	i = 0;
+	i = -1;
 	if ((tmp = trim_var("PATH")) == NULL)
 		return (NULL);
 	path_var = ft_strsplit(tmp, ':');
-	while (path_var[i] != NULL)
+	while (path_var[++i] != NULL)
 	{
-		full_filename = get_builtin(path_var[i], co_name);
-		if (full_filename != NULL)
+		if ((full_filename = get_builtin(path_var[i], co_name)) != NULL)
 			break ;
-		i++;
 	}
 	del_matrix(path_var);
 	free(path_var);

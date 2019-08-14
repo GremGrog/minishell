@@ -39,10 +39,26 @@ int		validate_var_name(char **args, int len)
 	return (0);
 }
 
+void	add_value(int var_len, char **ar, int i)
+{
+	char	*tmp;
+	char	*var;
+
+	if (i != -1)
+		free(g_env->envp[i]);
+	if (!(g_env->envp[i] =
+	(char*)malloc(sizeof(char) * (var_len + ft_strlen(ar[2])) + 2)))
+		return ;
+	var = ft_strjoin(ar[1], "=");
+	tmp = ft_strjoin(var, ar[2]);
+	ft_strcpy(g_env->envp[i], tmp);
+	free(tmp);
+	free(var);
+}
+
 void	add_var(char **ar, int len, int v_i)
 {
 	char	*var;
-	char	*tmp;
 	int		i;
 	int		var_len;
 
@@ -54,20 +70,10 @@ void	add_var(char **ar, int len, int v_i)
 			return ;
 		var = ft_strjoin(ar[1], "=");
 		ft_strcpy(g_env->envp[i], var);
+		free(var);
 	}
 	if (len == 3)
-	{
-		if (v_i != -1)
-			free(g_env->envp[i]);
-		if (!(g_env->envp[i] =
-		(char*)malloc(sizeof(char) * (var_len + ft_strlen(ar[2])) + 2)))
-			return ;
-		var = ft_strjoin(ar[1], "=");
-		tmp = ft_strjoin(var, ar[2]);
-		ft_strcpy(g_env->envp[i], tmp);
-		free(tmp);
-	}
-	free(var);
+		add_value(var_len, ar, i);
 }
 
 int		get_argc(char **argv)

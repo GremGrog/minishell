@@ -22,7 +22,6 @@ void	mini_loop(void)
 	signal(SIGINT, ctrl_c_handler);
 	while (1)
 	{
-
 		args = (t_args*)malloc(sizeof(t_args));
 		if (g_handler == 0)
 			write(1, "*_*/` ", 6);

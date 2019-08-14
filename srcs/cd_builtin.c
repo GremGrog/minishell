@@ -59,12 +59,27 @@ void	change_pwd_env(void)
 	free(old_pwd);
 }
 
+char	*get_absolute_path(char *arg)
+{
+	char	*path;
+	char	*buf;
+	char	*tmp;
+
+	path = trim_var("HOME");
+	tmp = ft_strsub(arg, 1, ft_strlen(arg));
+	buf = ft_strjoin(path, tmp);
+	free(tmp);
+	free(path);
+	path = ft_strdup(buf);
+	free(buf);
+	return (path);
+}
+
 void	cd_builtin(char **args)
 {
 	int		r;
 	int		f;
 	char	*path;
-	char	*buf;
 
 	f = 1;
 	path = NULL;
@@ -78,11 +93,7 @@ void	cd_builtin(char **args)
 		path = trim_var("HOME");
 	if (args[1][0] == '~' && args[1][1] != '\0')
 	{
-		path = trim_var("HOME");
-		buf = ft_strjoin(path, args[1]);
-		free(path);
-		path = ft_strdup(buf);
-		free(buf);
+		path = get_absolute_path(args[1]);
 		f = 1;
 	}
 	if (args[1] != NULL && (ft_strcmp(args[1], "-") == 0))

@@ -31,11 +31,13 @@ void	del_var(char *var)
 		else
 			arr[j++] = ft_strdup(g_env->envp[i++]);
 	}
+	arr[j] = NULL;
 	delete_env();
 	init_env();
 	copy_env(arr);
 	del_matrix(arr);
 	free(arr);
+	g_env->used_size--;
 }
 
 void	unsetenv_builtin(char **argv)

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void		parse_input(char *input, t_args *args)
+void	parse_input(char *input, t_args *args)
 {
 	t_co	*co_exec;
 
@@ -52,7 +52,7 @@ char	*add_memo(char *input, int buf_size)
 	ft_strcpy(input, tmp);
 	free(tmp);
 	while (i < buf_size)
-		input[i++] = 0;
+		input[i++] = '\0';
 	return (input);
 }
 
@@ -62,7 +62,6 @@ char	*read_input(char *input, int buf_size)
 	int		i;
 	char	symb;
 
-	symb = 0;
 	i = 0;
 	while ((ret = read(0, &symb, 1)) > 0)
 	{
@@ -72,9 +71,10 @@ char	*read_input(char *input, int buf_size)
 			break ;
 		}
 		input[i] = symb;
-		if (i + 1 == buf_size)
+		if (i == buf_size - 1)
 		{
 			buf_size *= 2;
+			input[++i] = '\0';
 			input = add_memo(input, buf_size);
 		}
 		i++;
@@ -90,12 +90,21 @@ char	*get_input(void)
 	int		i;
 	int		buf_size;
 	char	*input;
+	char	*buf;
 
 	i = 0;
 	buf_size = 100;
-	input = (char*)malloc(sizeof(char) * buf_size);
+	if (!(input = (char*)malloc(sizeof(char) * buf_size)))
+		return (NULL);
 	while (i < buf_size)
-		input[i++] = 0;
+		input[i++] = '\0';
 	input = read_input(input, buf_size);
-	return (input);
+	buf = ft_strtrim(input);
+	free(input);
+	if (ft_strcmp(buf, "\0") == 0)
+	{
+		free(buf);
+		return (NULL);
+	}
+	return (buf);
 }

@@ -12,15 +12,47 @@
 
 #include "../minishell.h"
 
+int		is_it_dir(char *full_path)
+{
+	struct stat buff;
+
+	stat(full_path, &buff);
+	if (S_ISDIR(buff.st_mode))
+		return (-1);
+	return (0);
+}
+
+int		error_managment(char *full_filename, char *co_name)
+{
+	if (full_filename == NULL)
+	{
+		ft_printf("minishell: command not found: %s\n", co_exec->co_name);
+		return (-1);
+	}
+	else if (access(full_filename, 0) != 0)
+	{
+		ft_printf("minishell: command not found: %s\n", full_filename);
+		free(full_filename);
+		return (-1);
+	}
+	else if (access(full_filename, 1) != 0)
+	{
+		ft_printf("error: no rights to execute: %s\n", full_filename);
+		free(full_filename);
+		return (-1);
+	}
+}
+
 void	exec_system_builtins(t_co *co_exec)
 {
 	char	*full_filename;
 	pid_t	pid;
 	int		status;
 
+	if (ft_strcmp(co_exec->co_name, "\0") == 0)
+		return ;
 	full_filename = search_builtin(co_exec->co_name);
-	if (full_filename == NULL)
-		ft_printf("minishell: command not found: %s\n", co_exec->co_name);
+
 	else
 	{
 		pid = fork();
