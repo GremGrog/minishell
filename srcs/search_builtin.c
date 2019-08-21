@@ -38,37 +38,6 @@ char	*get_builtin(char *path, char *co_name)
 	}
 }
 
-int		search_var(char *ar)
-{
-	int	i;
-
-	i = 0;
-	while (g_env->envp[i])
-	{
-		if (strncmp(g_env->envp[i], ar, ft_strlen(ar)) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-char	*trim_var(char *var)
-{
-	char	*str;
-	int		i;
-	int		j;
-	int		len;
-
-	j = 0;
-	if ((i = search_var(var)) == -1)
-		return (NULL);
-	while (g_env->envp[i][j] && g_env->envp[i][j++] != '=')
-		;
-	len = ft_strlen(g_env->envp[i]) - j;
-	str = ft_strsub(g_env->envp[i], j, len);
-	return (str);
-}
-
 char	*get_exec_path(char *co_name)
 {
 	char	*tmp;

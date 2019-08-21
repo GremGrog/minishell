@@ -28,6 +28,7 @@ static char	*ft_strrev(char *s)
 	while (i < ft_strlen(s))
 		str[i++] = s[j--];
 	str[i] = '\0';
+	free(s);
 	return (str);
 }
 

@@ -12,16 +12,11 @@
 
 #include "../minishell.h"
 
-void	print_env(void)
+void	env_builtin(void)
 {
 	int	i;
 
 	i = 0;
 	while (g_env->envp[i])
 		ft_printf("%s\n", g_env->envp[i++]);
-}
-
-void	env_builtin(void)
-{
-	print_env();
 }

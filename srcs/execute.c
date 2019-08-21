@@ -26,7 +26,7 @@ int		error_managment(char *full_filename, char *co_name)
 {
 	if (full_filename == NULL)
 	{
-		ft_printf("minishell: command not found: %s\n", co_exec->co_name);
+		ft_printf("minishell: command not found: %s\n", co_name);
 		return (-1);
 	}
 	else if (access(full_filename, 0) != 0)
@@ -41,6 +41,7 @@ int		error_managment(char *full_filename, char *co_name)
 		free(full_filename);
 		return (-1);
 	}
+	return (0);
 }
 
 void	exec_system_builtins(t_co *co_exec)
@@ -52,7 +53,8 @@ void	exec_system_builtins(t_co *co_exec)
 	if (ft_strcmp(co_exec->co_name, "\0") == 0)
 		return ;
 	full_filename = search_builtin(co_exec->co_name);
-
+	if (error_managment(full_filename, co_exec->co_name) == -1)
+		return ;
 	else
 	{
 		pid = fork();

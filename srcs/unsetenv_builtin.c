@@ -12,6 +12,18 @@
 
 #include "../minishell.h"
 
+int		check_var(int var_index)
+{
+	if ((var_index) == -1)
+		return (-1);
+	if (ft_strncmp(g_env->envp[var_index], "HOME", 4) == 0)
+	{
+		ft_printf("error: prohibited action\n");
+		return (-1);
+	}
+	return (0);
+}
+
 void	del_var(char *var)
 {
 	int		var_index;
@@ -19,7 +31,8 @@ void	del_var(char *var)
 	int		j;
 	char	**arr;
 
-	if ((var_index = search_var(var)) == -1)
+	var_index = search_var(var);
+	if (check_var(var_index) == -1)
 		return ;
 	i = 0;
 	j = 0;

@@ -96,7 +96,7 @@ void	setenv_builtin(char **argv)
 	var_index = 0;
 	len = get_argc(argv);
 	if (len == 1)
-		print_env();
+		env_builtin();
 	else if (len >= 2 && len < 4)
 	{
 		if (validate_var_name(argv, len) == -1)

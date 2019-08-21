@@ -41,6 +41,7 @@ int		main(int argc, char **argv, char **env)
 		return (-1);
 	init_env();
 	copy_env(env);
+	add_shlvl();
 	mini_loop();
 	return (0);
 }

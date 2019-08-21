@@ -35,6 +35,7 @@ SRCF = srcs/main.c \
 		srcs/exit_builtin.c \
 		srcs/dollar.c \
 		srcs/read_input.c \
+		srcs/change_env.c \
 
 OBJF = $(addprefix $(DIR_O)/,$(patsubst %.c,%.o,$(SRCF)))
 
